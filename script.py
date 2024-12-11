@@ -1,5 +1,8 @@
 import logging
 import os
+import time
+import psutil
+from threading import Thread
 from opentelemetry import trace, metrics
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
@@ -11,6 +14,40 @@ from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
 from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
 from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 from opentelemetry.sdk.resources import Resource
+from opentelemetry.metrics import Observation, CallbackOptions
+
+# 0. Setup for script
+cpu_gauge = None
+ram_gauge = None
+disk_gauge = None
+network_sent_gauge = None
+network_recv_gauge = None
+
+# Callback to gather CPU usage
+def __get_cpu_usage_callback(_: CallbackOptions):
+    for (number, percent) in enumerate(psutil.cpu_percent(percpu=True)):
+        attributes = {"cpu_number": str(number)}
+        yield Observation(percent, attributes)
+
+# Callback to gather RAM memory usage
+def __get_ram_usage_callback(_: CallbackOptions):
+    ram_percent = psutil.virtual_memory().percent
+    yield Observation(ram_percent)
+
+# Callback to gather disk usage
+def __get_disk_usage_callback(_: CallbackOptions):
+    disk_percent = psutil.disk_usage('/').percent
+    yield Observation(disk_percent)
+
+# Callback to gather network sent bytes
+def __get_network_sent_callback(_: CallbackOptions):
+    net_sent = psutil.net_io_counters().bytes_sent
+    yield Observation(net_sent)
+
+# Callback to gather network received bytes
+def __get_network_recv_callback(_: CallbackOptions):
+    net_recv = psutil.net_io_counters().bytes_recv
+    yield Observation(net_recv)
 
 # Retrieve OTLP endpoint from environment variable or default to localhost
 otlp_endpoint = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
@@ -34,16 +71,46 @@ trace.get_tracer_provider().add_span_processor(span_processor)
 
 # 2. Set up the Meter Provider for metrics
 metric_reader = PeriodicExportingMetricReader(
-    OTLPMetricExporter(endpoint=otlp_endpoint, insecure=True)
+    OTLPMetricExporter(endpoint=otlp_endpoint, insecure=True),
+    export_interval_millis=1000
 )
 metrics.set_meter_provider(MeterProvider(resource=resource, metric_readers=[metric_reader]))
 meter = metrics.get_meter(__name__)
 
-# Create an example counter metric
-counter = meter.create_counter("example_counter", description="An example counter")
+# Create example metrics
+cpu_usage = meter.create_observable_gauge(
+    "cpu_usage",
+    callbacks=[__get_cpu_usage_callback],
+    unit="%",
+    description="CPU usage"
+)
+memory_usage = meter.create_observable_gauge(
+    "memory_usage",
+    callbacks=[__get_ram_usage_callback],
+    unit="%",
+    description="Memory usage"
+)
+disk_usage = meter.create_observable_gauge(
+    "disk_usage",
+    callbacks=[__get_disk_usage_callback],
+    unit="%",
+    description="Disk usage"
+)
+network_sent = meter.create_observable_gauge(
+    "network_sent",
+    callbacks=[__get_network_sent_callback],
+    unit="bytes",
+    description="Network bytes sent"
+)
+network_recv = meter.create_observable_gauge(
+    "network_recv",
+    callbacks=[__get_network_recv_callback],
+    unit="bytes",
+    description="Network bytes received"
+)
 
-# Record a metric
-counter.add(1, {"key": "value"})
+example_counter = meter.create_counter("example_counter", description="An example counter")
+example_counter.add(1, {"key": "value"})
 
 # 3. Set up Logger Provider for logs
 logger_provider = LoggerProvider(resource=resource)
@@ -58,15 +125,29 @@ logging.getLogger().addHandler(logging_handler)
 
 # Log messages
 logger = logging.getLogger(__name__)
-logger.info("This is an example log message!")
+logger.info("OpenTelemetry demo application starting...")
 
-# 4. Example usage of spans
-with tracer.start_as_current_span("example-span"):
-    logger.info("Logging within a span context!")
-    print("Hello, OpenTelemetry!")
+# Background function to generate spans and logs
+def generate_spans_and_logs():
+    while True:
+        with tracer.start_as_current_span("periodic-span") as span:
+            logger.info("This is a periodic log within a span context.")
+            span.set_attribute("cpu.usage", psutil.cpu_percent())
+            span.set_attribute("memory.usage", psutil.virtual_memory().percent)
+            span.set_attribute("disk.usage", psutil.disk_usage('/').percent)
+            span.set_attribute("network.sent", psutil.net_io_counters().bytes_sent)
+            span.set_attribute("network.recv", psutil.net_io_counters().bytes_recv)
+        time.sleep(10)
 
-    # Record another metric inside the span
-    counter.add(2, {"key": "span_metric"})
+# Start a background thread for spans and logs
+span_log_thread = Thread(target=generate_spans_and_logs, daemon=True)
+span_log_thread.start()
 
-# Shut down the LoggerProvider to flush logs before exiting
-logger_provider.shutdown()
+# Keep the script running
+try:
+    while True:
+        logger.info("Application is running and sending telemetry data...")
+        time.sleep(30)
+except KeyboardInterrupt:
+    logger.info("Shutting down...")
+    logger_provider.shutdown()
