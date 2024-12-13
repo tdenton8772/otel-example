@@ -71,3 +71,26 @@ services:
     command: ["python", "script.py"]
     volumes:
       - ./script.py:/app/script.py
+
+  startree-pinot:
+    build:
+      context: .
+      dockerfile: DockerFileST
+    ports:
+      - "2123:2123"
+      - "9000:9000"
+      - "8000:8000"
+      - "7050:7050"
+      - "19092:19092"
+      - "6000:6000"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
