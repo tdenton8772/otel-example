@@ -1,3 +1,3 @@
-FROM repo.startreedata.io/external-docker-registry/startree-metrics-agent:1.0.1
+FROM repo.startreedata.io/external-docker-registry/startree-metrics-agent:otel-auto-nation-demo-dec-11
 
-CMD ["StarTreeQuickStart", "-type", "OTEL_COLLECTOR"]
+CMD ["./bin/startree-pinot-admin.sh", "StarTreeQuickStart", "-type", "OTEL_COLLECTOR"]

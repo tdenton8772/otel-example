@@ -76,6 +76,7 @@ services:
     build:
       context: .
       dockerfile: DockerFileST
+    platform: linux/amd64
     ports:
       - "2123:2123"
       - "9000:9000"
@@ -94,3 +95,6 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
       - grafana-data:/var/lib/grafana
+
+volumes:
+  grafana-data:
