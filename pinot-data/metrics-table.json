@@ -1,0 +1,30 @@
+{
+    "tableName": "otlp_metrics",
+    "tableType": "REALTIME",
+    "segmentsConfig": {
+      "timeColumnName": "ts",
+      "schemaName": "otlp_metrics",
+      "replicasPerPartition": "1"
+    },
+    "tenants": {},
+    "tableIndexConfig": {
+      "loadMode": "MMAP",
+      "streamConfigs": {
+        "streamType": "kafka",
+        "stream.kafka.consumer.type": "lowlevel",
+        "stream.kafka.topic.name": "otlp_metrics",
+        "stream.kafka.decoder.class.name": "ai.startree.pinot.plugin.inputformat.otel.OtelMessageDecoder",
+        "stream.kafka.consumer.factory.class.name": "org.apache.pinot.plugin.stream.kafka20.KafkaConsumerFactory",
+        "stream.kafka.broker.list": "98.58.127.45:9092",
+        "realtime.segment.flush.threshold.rows": "0",
+        "realtime.segment.flush.threshold.time": "24h",
+        "realtime.segment.flush.threshold.segment.size": "50M",
+        "stream.kafka.consumer.prop.auto.offset.reset": "smallest",
+        "stream.kafka.decoder.prop.oteldatatype": "metrics"
+      }
+    },
+    "metadata": {
+      "customConfigs": {}
+    }
+  }
+  
