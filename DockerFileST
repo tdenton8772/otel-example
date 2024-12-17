@@ -1,6 +1,6 @@
 FROM repo.startreedata.io/external-docker-registry/startree-metrics-agent:otel-auto-nation-demo-dec-11
 
-WORKDIR "/home/pinot"
+WORKDIR /home/pinot
 
 ENTRYPOINT [ "/home/pinot/bin/startree-pinot-admin.sh" ]
 
