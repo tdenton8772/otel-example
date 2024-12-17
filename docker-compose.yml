@@ -84,6 +84,8 @@ services:
       - "7050:7050"
       - "19092:19092"
       - "6000:6000"
+    volumes:
+      - /Users/tdenton/Development/autonation/otel-example/pinot-data:/data
 
   grafana:
     image: grafana/grafana:9.1.1
@@ -91,10 +93,18 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      GF_DEFAULT_APP_MODE: development
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: startree-pinot-datasource
+      GF_LOG_FILTERS: plugin.startree-pinot-datasource:debug
+      GF_LOG_LEVEL: debug
+      GF_DATAPROXY_LOGGING: 1
     volumes:
-      - grafana-data:/var/lib/grafana
+      - /Users/tdenton/Development/autonation/otel-example/grafana-data:/var/lib/grafana
+      - /Users/tdenton/Development/autonation/otel-example/grafana-data/defaults.ini:/usr/share/grafana/conf/defaults.ini
+      - /Users/tdenton/Development/autonation/otel-example/grafana-data/defaults.ini:/etc/grafana/grafana.ini
 
 volumes:
   grafana-data:
+

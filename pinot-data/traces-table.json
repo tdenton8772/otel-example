@@ -12,7 +12,7 @@
       "streamConfigs": {
         "streamType": "kafka",
         "stream.kafka.consumer.type": "lowlevel",
-        "stream.kafka.topic.name": "otlp_traces",
+        "stream.kafka.topic.name": "otlp_spans",
         "stream.kafka.decoder.class.name": "ai.startree.pinot.plugin.inputformat.otel.OtelMessageDecoder",
         "stream.kafka.consumer.factory.class.name": "org.apache.pinot.plugin.stream.kafka20.KafkaConsumerFactory",
         "stream.kafka.broker.list": "98.58.127.45:9092",

@@ -1,4 +1,4 @@
-otel-example % docker run \
+docker run \
     -p 2123:2123 \
     -p 9000:9000 \
     -p 8000:8000 \
@@ -9,3 +9,4 @@ otel-example % docker run \
     -v /Users/tdenton/Development/autonation/otel-example/pinot-data:/data \
     repo.startreedata.io/external-docker-registry/startree-metrics-agent:otel-auto-nation-demo-dec-13 \
     StarTreeQuickStart -type OTEL_COLLECTOR
+
