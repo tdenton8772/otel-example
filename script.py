@@ -49,6 +49,24 @@ def __get_network_recv_callback(_: CallbackOptions):
     net_recv = psutil.net_io_counters().bytes_recv
     yield Observation(net_recv)
 
+# Function to start a metric thread with its own reader
+def start_metric_thread(callback, gauge_name, unit, description, resource):
+    def metric_thread():
+        metric_reader = PeriodicExportingMetricReader(
+            OTLPMetricExporter(endpoint=otlp_endpoint, insecure=True),
+            export_interval_millis=1000
+        )
+        meter_provider = MeterProvider(resource=resource, metric_readers=[metric_reader])
+        meter = meter_provider.get_meter(__name__)
+        meter.create_observable_gauge(
+            gauge_name, callbacks=[callback], unit=unit, description=description
+        )
+        while True:
+            time.sleep(1)  # Keep the thread alive
+
+    thread = Thread(target=metric_thread, daemon=True)
+    thread.start()
+
 # Retrieve OTLP endpoint from environment variable or default to localhost
 otlp_endpoint = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
 
@@ -69,48 +87,47 @@ otlp_span_exporter = OTLPSpanExporter(endpoint=otlp_endpoint, insecure=True)
 span_processor = BatchSpanProcessor(otlp_span_exporter)
 trace.get_tracer_provider().add_span_processor(span_processor)
 
-# 2. Set up the Meter Provider for metrics
-metric_reader = PeriodicExportingMetricReader(
-    OTLPMetricExporter(endpoint=otlp_endpoint, insecure=True),
-    export_interval_millis=1000
-)
-metrics.set_meter_provider(MeterProvider(resource=resource, metric_readers=[metric_reader]))
-meter = metrics.get_meter(__name__)
+# # Create example metrics
+# cpu_usage = meter.create_observable_gauge(
+#     "cpu_usage",
+#     callbacks=[__get_cpu_usage_callback],
+#     unit="%",
+#     description="CPU usage"
+# )
+# memory_usage = meter.create_observable_gauge(
+#     "memory_usage",
+#     callbacks=[__get_ram_usage_callback],
+#     unit="%",
+#     description="Memory usage"
+# )
+# disk_usage = meter.create_observable_gauge(
+#     "disk_usage",
+#     callbacks=[__get_disk_usage_callback],
+#     unit="%",
+#     description="Disk usage"
+# )
+# network_sent = meter.create_observable_gauge(
+#     "network_sent",
+#     callbacks=[__get_network_sent_callback],
+#     unit="bytes",
+#     description="Network bytes sent"
+# )
+# network_recv = meter.create_observable_gauge(
+#     "network_recv",
+#     callbacks=[__get_network_recv_callback],
+#     unit="bytes",
+#     description="Network bytes received"
+# )
+# example_counter = meter.create_counter("example_counter", description="An example counter")
+# example_counter.add(1, {"key": "value"})
 
-# Create example metrics
-cpu_usage = meter.create_observable_gauge(
-    "cpu_usage",
-    callbacks=[__get_cpu_usage_callback],
-    unit="%",
-    description="CPU usage"
-)
-memory_usage = meter.create_observable_gauge(
-    "memory_usage",
-    callbacks=[__get_ram_usage_callback],
-    unit="%",
-    description="Memory usage"
-)
-disk_usage = meter.create_observable_gauge(
-    "disk_usage",
-    callbacks=[__get_disk_usage_callback],
-    unit="%",
-    description="Disk usage"
-)
-network_sent = meter.create_observable_gauge(
-    "network_sent",
-    callbacks=[__get_network_sent_callback],
-    unit="bytes",
-    description="Network bytes sent"
-)
-network_recv = meter.create_observable_gauge(
-    "network_recv",
-    callbacks=[__get_network_recv_callback],
-    unit="bytes",
-    description="Network bytes received"
-)
+# Start threads for each metric, each with its own MetricReader
+start_metric_thread(__get_cpu_usage_callback, "cpu_usage", "%", "CPU usage", resource)
+start_metric_thread(__get_ram_usage_callback, "memory_usage", "%", "Memory usage", resource)
+start_metric_thread(__get_disk_usage_callback, "disk_usage", "%", "Disk usage", resource)
+start_metric_thread(__get_network_sent_callback, "network_sent", "bytes", "Network bytes sent", resource)
+start_metric_thread(__get_network_recv_callback, "network_recv", "bytes", "Network bytes received", resource)
 
-example_counter = meter.create_counter("example_counter", description="An example counter")
-example_counter.add(1, {"key": "value"})
 
 # 3. Set up Logger Provider for logs
 logger_provider = LoggerProvider(resource=resource)

@@ -73,6 +73,7 @@ services:
       - ./script.py:/app/script.py
 
   startree-pinot:
+    container_name: startree-pinot
     build:
       context: .
       dockerfile: DockerFileST

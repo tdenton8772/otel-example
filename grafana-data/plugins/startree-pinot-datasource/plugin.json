@@ -1,0 +1,34 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
+  "name": "Pinot",
+  "id": "startree-pinot-datasource",
+  "metrics": true,
+  "backend": true,
+  "executable": "gpx_pinot",
+  "alerting": true,
+  "info": {
+    "description": "Pinot",
+    "author": {
+      "name": "Startree"
+    },
+    "keywords": [
+      "pinot",
+      "startree",
+      "datasource"
+    ],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [],
+    "screenshots": [],
+    "version": "1.0.7",
+    "updated": "2024-12-17"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=9.1.1",
+    "plugins": []
+  },
+  "logs": true
+}

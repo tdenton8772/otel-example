@@ -1,0 +1,782 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "startree-pinot-datasource",
+        "uid": "yt3qQtSNz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "aggregationFunction": "SUM",
+          "datasource": {
+            "type": "startree-pinot-datasource",
+            "uid": "yt3qQtSNz"
+          },
+          "displayType": "TIMESERIES",
+          "editorMode": "Code",
+          "groupByColumnsV2": [
+            {
+              "name": "metric"
+            }
+          ],
+          "metricColumnV2": {
+            "name": "value"
+          },
+          "orderBy": [],
+          "pinotQlCode": "SELECT\n    ts AS $__timeAlias(),\n    \"value\" AS $__metricAlias()\n\nFROM\n    $__table()\nWHERE\n    \"metric\" = 'cpu_usage'\n    AND $__timeFilter(\"ts\", '20:SECONDS')\nORDER BY\n    $__timeAlias() DESC\nLIMIT 100000;",
+          "promQlCode": "",
+          "queryType": "PinotQL",
+          "refId": "A",
+          "tableName": "otlp_metrics",
+          "timeColumn": "ts",
+          "timeColumnAlias": "time"
+        }
+      ],
+      "title": "CPU Utilization",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "startree-pinot-datasource",
+        "uid": "yt3qQtSNz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "aggregationFunction": "SUM",
+          "datasource": {
+            "type": "startree-pinot-datasource",
+            "uid": "yt3qQtSNz"
+          },
+          "displayType": "TIMESERIES",
+          "editorMode": "Code",
+          "groupByColumnsV2": [
+            {
+              "name": "metric"
+            }
+          ],
+          "metricColumnV2": {
+            "name": "value"
+          },
+          "orderBy": [],
+          "pinotQlCode": "SELECT\n    ts AS $__timeAlias(),\n    \"value\" AS $__metricAlias()\n\nFROM\n    $__table()\nWHERE\n    \"metric\" = 'memory_usage'\n    AND $__timeFilter(\"ts\", '20:SECONDS')\nORDER BY\n    $__timeAlias() DESC\nLIMIT 100000;",
+          "promQlCode": "",
+          "queryType": "PinotQL",
+          "refId": "A",
+          "tableName": "otlp_metrics",
+          "timeColumn": "ts",
+          "timeColumnAlias": "time"
+        }
+      ],
+      "title": "Memory Utilization",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "startree-pinot-datasource",
+        "uid": "yt3qQtSNz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "aggregationFunction": "SUM",
+          "datasource": {
+            "type": "startree-pinot-datasource",
+            "uid": "yt3qQtSNz"
+          },
+          "displayType": "TIMESERIES",
+          "editorMode": "Code",
+          "groupByColumnsV2": [
+            {
+              "name": "metric"
+            }
+          ],
+          "metricColumnV2": {
+            "name": "value"
+          },
+          "orderBy": [],
+          "pinotQlCode": "SELECT\n    ts AS $__timeAlias(),\n    \"value\" AS $__metricAlias(),\n    \"metric\" as metric_name\nFROM\n    $__table()\nWHERE\n    \"metric\" in ('network_recv', 'network_sent')\n    AND $__timeFilter(\"ts\", '20:SECONDS')\nORDER BY\n    $__timeAlias() DESC\nLIMIT 100000;",
+          "promQlCode": "",
+          "queryType": "PinotQL",
+          "refId": "A",
+          "tableName": "otlp_metrics",
+          "timeColumn": "ts",
+          "timeColumnAlias": "time"
+        }
+      ],
+      "title": "Network Utilization",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "startree-pinot-datasource",
+        "uid": "yt3qQtSNz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "aggregationFunction": "SUM",
+          "datasource": {
+            "type": "startree-pinot-datasource",
+            "uid": "yt3qQtSNz"
+          },
+          "displayType": "TIMESERIES",
+          "editorMode": "Code",
+          "groupByColumnsV2": [
+            {
+              "name": "metric"
+            }
+          ],
+          "metricColumnV2": {
+            "name": "value"
+          },
+          "orderBy": [],
+          "pinotQlCode": "SELECT\n    ts AS $__timeAlias(),\n    \"value\" AS $__metricAlias(),\n    \"metric\" as metric_name\nFROM\n    $__table()\nWHERE\n    \"metric\" in ('disk_usage')\n    AND $__timeFilter(\"ts\", '20:SECONDS')\nORDER BY\n    $__timeAlias() DESC\nLIMIT 100000;",
+          "promQlCode": "",
+          "queryType": "PinotQL",
+          "refId": "A",
+          "tableName": "otlp_metrics",
+          "timeColumn": "ts",
+          "timeColumnAlias": "time"
+        }
+      ],
+      "title": "Disk Utilization",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "startree-pinot-datasource",
+        "uid": "yt3qQtSNz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "aggregationFunction": "SUM",
+          "datasource": {
+            "type": "startree-pinot-datasource",
+            "uid": "yt3qQtSNz"
+          },
+          "displayType": "TIMESERIES",
+          "editorMode": "Code",
+          "logColumnAlias": "body",
+          "pinotQlCode": "SELECT $__timeGroup(\"ts\", '1:MINUTES') as $__timeAlias(),\n  severityText AS \"level\",\n  count(*) AS \"metric\"\nFROM $__table() \nWHERE $__timeFilter(\"ts\") \n  AND ('$level' = 'ALL' OR \"severityText\" = '$level')\n  AND ('$match' = '' OR TEXT_MATCH(\"body\", '$match'))\nGROUP BY \n  1,\n  2\nORDER BY $__timeAlias() DESC\nLIMIT 1000000;",
+          "queryType": "PinotQL",
+          "refId": "A",
+          "tableName": "otlp_logs",
+          "timeColumnAlias": "ts"
+        }
+      ],
+      "title": "Logs Ingested",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "startree-pinot-datasource",
+        "uid": "yt3qQtSNz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "aggregationFunction": "SUM",
+          "datasource": {
+            "type": "startree-pinot-datasource",
+            "uid": "yt3qQtSNz"
+          },
+          "displayType": "TIMESERIES",
+          "editorMode": "Code",
+          "logColumnAlias": "body",
+          "pinotQlCode": "SELECT $__timeGroup(\"start_time\", '1:MINUTES') as $__timeAlias(),\n  count(*) AS \"metric\"\nFROM $__table() \nWHERE $__timeFilter(\"start_time\") \nGROUP BY \n  1\nORDER BY $__timeAlias() DESC\nLIMIT 1000000;",
+          "queryType": "PinotQL",
+          "refId": "A",
+          "tableName": "otlp_traces",
+          "timeColumnAlias": "start_time"
+        }
+      ],
+      "title": "Spans Ingested",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "startree-pinot-datasource",
+        "uid": "yt3qQtSNz"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 6,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "targets": [
+        {
+          "aggregationFunction": "SUM",
+          "datasource": {
+            "type": "startree-pinot-datasource",
+            "uid": "yt3qQtSNz"
+          },
+          "displayType": "LOGS",
+          "editorMode": "Code",
+          "logColumnAlias": "body",
+          "pinotQlCode": "SELECT \"ts\" AS $__timeAlias(), body\nFROM $__table()\nWHERE $__timeFilter(\"ts\")\nORDER BY $__timeAlias() DESC\nLIMIT 100000",
+          "queryType": "PinotQL",
+          "refId": "A",
+          "tableName": "otlp_logs",
+          "timeColumnAlias": "ts"
+        }
+      ],
+      "title": "Logs",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "startree-pinot-datasource",
+        "uid": "yt3qQtSNz"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 4,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "aggregationFunction": "NONE",
+          "datasource": {
+            "type": "startree-pinot-datasource",
+            "uid": "yt3qQtSNz"
+          },
+          "displayType": "LOGS",
+          "editorMode": "Code",
+          "logColumnAlias": "Traceid",
+          "metricColumnV2": {
+            "name": "severityNumber"
+          },
+          "pinotQlCode": "SET useMultistageEngine=true;\nSELECT\n    t.\"start_time\" AS $__timeAlias(),\n    t.Traceid,\n    t.spanid,\n    l.body, \n    l.severityNumber, \n    l.severityText, \n    l.spanId\nFROM\n    otlp_traces t left join otlp_logs l  on t.Traceid = l.traceId\nWHERE\n    $__timeFilter(\"start_time\", '200:MILLISECONDS')\nORDER BY $__timeAlias() DESC\nLIMIT 100000;",
+          "queryType": "PinotQL",
+          "refId": "A",
+          "tableName": "otlp_traces",
+          "timeColumn": "ts",
+          "timeColumnAlias": "start_time"
+        }
+      ],
+      "title": "Traces",
+      "type": "logs"
+    }
+  ],
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "data",
+          "value": "data"
+        },
+        "description": "Filter logs using a Lucene query",
+        "hide": 0,
+        "label": "Match",
+        "name": "match",
+        "options": [
+          {
+            "selected": true,
+            "text": "data",
+            "value": "data"
+          }
+        ],
+        "query": "data",
+        "skipUrlSync": false,
+        "type": "textbox"
+      },
+      {
+        "allValue": "ALL",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "startree-pinot-datasource",
+          "uid": "yt3qQtSNz"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Level",
+        "multi": false,
+        "name": "level",
+        "options": [],
+        "query": {
+          "queryType": "PinotVariableQuery",
+          "tableName": "otlp_logs",
+          "variableQuery": {
+            "columnType": "ALL",
+            "pinotQlCode": "SELECT DISTINCT \"severityText\" FROM $__table()",
+            "variableType": "PINOT_QL_CODE"
+          }
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "OTEL Data Dashboard",
+  "uid": "4BEb9pIHz",
+  "version": 12,
+  "weekStart": ""
+}
