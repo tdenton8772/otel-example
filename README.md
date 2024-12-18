@@ -3,6 +3,7 @@
 run using docker
 
 ```
+docker build
 docker compose up
 ```
 
