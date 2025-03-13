@@ -7,7 +7,19 @@
       "replicasPerPartition": "1"
     },
     "tenants": {},
+    "fieldConfigList": [
+      {
+        "name": "body",
+        "encodingType": "RAW",
+        "indexTypes": [
+          "TEXT"
+        ]
+      }
+    ],
     "tableIndexConfig": {
+      "noDictionaryColumns": [
+        "body"
+      ],
       "loadMode": "MMAP",
       "streamConfigs": {
         "streamType": "kafka",
